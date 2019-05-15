@@ -7,9 +7,9 @@ import time
 
 ASCII_CHARS = [ '@', '%', '#', 'x', '+', '=', ';', ',', '-', '.', ' ']
 
+## Resizes an image preserving the aspect ratio.
 def scale_image(image, new_width=65):
-    """Resizes an image preserving the aspect ratio.
-    """
+ 
     (original_width, original_height) = image.size
     aspect_ratio = original_height/float(1.63603*original_width)
     new_height = int(aspect_ratio * new_width)
@@ -22,15 +22,14 @@ def convert_to_grayscale(image):
 
 def increase_contrast(image):
     enhancer = ImageEnhance.Contrast(image)
+    ## The below value can be tweaked around the default of 1.7 to whatever works best
     return  enhancer.enhance(1.7)
 
+
+## Maps each pixel to an ascii char based on the range in which it lies.
+## 0-255 is divided into 11 ranges of 25 pixels each.
 def map_pixels_to_ascii_chars(image, range_width=25):
-    """Maps each pixel to an ascii char based on the range
-    in which it lies.
-
-    0-255 is divided into 11 ranges of 25 pixels each.
-    """
-
+    
     pixels_in_image = list(image.getdata())
     pixels_to_chars = [ASCII_CHARS[int(pixel_value/range_width)] for pixel_value in
             pixels_in_image]
@@ -56,6 +55,8 @@ def handle_image_conversion(image_filepath):
         image = Image.open(image_filepath)
     except Exception as e:
 ##        print("Unable to open image file {image_filepath}.".format(image_filepath=image_filepath)
+## Above is commented out because of a weird bug involving Windows administrator rights and file path retrieval 
+
         print(e)
         return
 
